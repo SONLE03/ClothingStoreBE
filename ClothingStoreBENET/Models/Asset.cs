@@ -13,10 +13,8 @@ namespace FurnitureStoreBE.Models
         public string URL { get; set; }
         public string CloudinaryId { get; set; }
         public string FolderName { get; set; }
-
         public User? User { get; set; }
         public Brand? Brand { get; set; }
-        public Designer? Designer { get; set; }
         public Category? Category { get; set; }
         public Guid? ProductVariantId { get; set; }
         public ProductVariant? ProductVariant { get; set; }

@@ -20,7 +20,6 @@ namespace FurnitureStoreBE.Data
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
-        public DbSet<Designer> Designer { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<OrderStatus> OrderStatus { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -92,12 +91,6 @@ namespace FurnitureStoreBE.Data
                 .HasForeignKey(p => p.SizeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Desginer Relationship
-            modelBuilder.Entity<Asset>()
-                .HasOne(p => p.Designer)
-                .WithOne(p => p.Asset)
-                .HasForeignKey<Designer>(p => p.AssetId);
-
             // Coupon relationship
             modelBuilder.Entity<Coupon>()
                .HasIndex(e => e.Code)
@@ -121,12 +114,6 @@ namespace FurnitureStoreBE.Data
                 .HasForeignKey(uc => uc.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Designer relationship
-            modelBuilder.Entity<Asset>()
-              .HasOne(p => p.Designer)
-              .WithOne(p => p.Asset)
-              .HasForeignKey<Designer>(p => p.AssetId);   
-
             modelBuilder.Entity<Favorite>()
                 .HasKey(uc => new { uc.UserId, uc.ProductId });
             modelBuilder.Entity<Product>()
@@ -144,15 +131,6 @@ namespace FurnitureStoreBE.Data
                  .HasOne(p => p.Product)
                  .WithOne(p => p.Asset)
                  .HasForeignKey<Product>(p => p.AssetId);
-
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.Designers)
-                .WithMany(p => p.Products)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ProductDesigner",
-                    j => j.HasOne<Designer>().WithMany().HasForeignKey("DesignerId").OnDelete(DeleteBehavior.Restrict),
-                    j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId").OnDelete(DeleteBehavior.Restrict));
-
 
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.ProductVariants)

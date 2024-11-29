@@ -1,8 +1,5 @@
-﻿using FurnitureStoreBE.Enums;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Principal;
 
 namespace FurnitureStoreBE.Models
 {
@@ -22,7 +19,6 @@ namespace FurnitureStoreBE.Models
         public string Role { get; set; }
         public ICollection<RefreshToken>? Tokens { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
-
         public ICollection<Review>? Reviews { get; set; }
         public ICollection<Question>? Question { get; set; }
         public ICollection<Reply>? Reply { get; set; }
@@ -31,7 +27,6 @@ namespace FurnitureStoreBE.Models
         public ICollection<Order>? Orders { get; set; }
         public ICollection<Favorite>? Favorites { get; set; }
         public ICollection<OrderItem>? OrderItems { get; set; }
-
         public Cart Cart { get; set; }
     }
 }
