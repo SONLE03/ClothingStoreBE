@@ -19,6 +19,7 @@ namespace FurnitureStoreBE.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Color> Colors { get; set; }
+        public DbSet<Size> Sizes { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<OrderStatus> OrderStatus { get; set; }
