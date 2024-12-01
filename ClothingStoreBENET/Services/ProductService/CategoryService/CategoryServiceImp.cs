@@ -80,10 +80,6 @@ namespace FurnitureStoreBE.Services.ProductService.CategoryService
             await using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                if(!await _dbContext.FurnitureTypes.AnyAsync(ft => categoryRequest.FurnitureTypeId == ft.Id))
-                {
-                    throw new ObjectNotFoundException("Furniture type not found");
-                }
                 Asset asset = null;
                 if (categoryRequest.Image != null)
                 {
@@ -101,7 +97,6 @@ namespace FurnitureStoreBE.Services.ProductService.CategoryService
                     CategoryName = categoryRequest.CategoryName, 
                     Description = categoryRequest.Description, 
                     Asset = asset,
-                    FurnitureTypeId = categoryRequest.FurnitureTypeId,
                 };
                 category.setCommonCreate(UserSession.GetUserId());
                 await _dbContext.Categories.AddAsync(category);

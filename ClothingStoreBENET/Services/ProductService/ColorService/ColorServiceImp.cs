@@ -13,12 +13,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FurnitureStoreBE.Services.ProductService.ColorService
 {
-    public class SizeServiceImp : ISizeService
+    public class ColorServiceImp : IColorService
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly IFileUploadService _fileUploadService;
         private readonly IMapper _mapper;
-        public SizeServiceImp(ApplicationDBContext dbContext, IFileUploadService fileUploadService, IMapper mapper)
+        public ColorServiceImp(ApplicationDBContext dbContext, IFileUploadService fileUploadService, IMapper mapper)
         {
             _dbContext = dbContext;
             _fileUploadService = fileUploadService;

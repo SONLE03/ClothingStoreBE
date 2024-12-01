@@ -6,7 +6,7 @@ namespace FurnitureStoreBE.DTOs.Request.ProductRequest
     {
         [Required(ErrorMessage = "Size name is required.")]
 
-        public string ColorName { get; set; }
+        public string SizeName { get; set; }
     }
 }
 

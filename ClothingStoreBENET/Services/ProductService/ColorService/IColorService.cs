@@ -5,7 +5,7 @@ using FurnitureStoreBE.DTOs.Response.ProductResponse;
 
 namespace FurnitureStoreBE.Services.ProductService.ColorService
 {
-    public interface ISizeService
+    public interface IColorService
     {
         Task<PaginatedList<ColorResponse>> GetAllColors(PageInfo pageInfo);
         Task<ColorResponse> CreateColor(ColorRequest colorRequest);

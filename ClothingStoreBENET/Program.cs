@@ -8,6 +8,10 @@ using FurnitureStoreBE.Services.Authentication;
 using FurnitureStoreBE.Services.Caching;
 using FurnitureStoreBE.Services.FileUploadService;
 using FurnitureStoreBE.Services.MailService;
+using FurnitureStoreBE.Services.ProductService.BrandService;
+using FurnitureStoreBE.Services.ProductService.CategoryService;
+using FurnitureStoreBE.Services.ProductService.ColorService;
+using FurnitureStoreBE.Services.ProductService.SizeService;
 using FurnitureStoreBE.Services.Token;
 using FurnitureStoreBE.Services.UserService;
 using FurnitureStoreBE.Utils;
@@ -224,7 +228,10 @@ builder.Services.AddScoped<IAuthService, AuthServiceImp>();
 builder.Services.AddScoped<ITokenService, TokenServiceImp>();
 builder.Services.AddScoped<IUserService, UserServiceImp>();
 builder.Services.AddScoped<IRedisCacheService, RedisCacheServiceImp>();
-
+builder.Services.AddScoped<IColorService, ColorServiceImp>();
+builder.Services.AddScoped<IBrandService, BrandServiceImp>();
+builder.Services.AddScoped<ICategoryService, CategoryServiceImp>();
+builder.Services.AddScoped<ISizeService, SizeServiceImp>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
