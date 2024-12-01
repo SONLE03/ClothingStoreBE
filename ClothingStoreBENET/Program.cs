@@ -1,6 +1,16 @@
+using FurnitureStoreBE.Common;
 using FurnitureStoreBE.Configurations;
 using FurnitureStoreBE.Data;
+using FurnitureStoreBE.Exceptions;
 using FurnitureStoreBE.Models;
+using FurnitureStoreBE.Services;
+using FurnitureStoreBE.Services.Authentication;
+using FurnitureStoreBE.Services.Caching;
+using FurnitureStoreBE.Services.FileUploadService;
+using FurnitureStoreBE.Services.MailService;
+using FurnitureStoreBE.Services.Token;
+using FurnitureStoreBE.Services.UserService;
+using FurnitureStoreBE.Utils;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -181,6 +191,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CreateReportPolicy", policy => policy.RequireClaim("CreateReport"));
 });
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 var redisConnectionString = ConnectionHelper.GetRedisConnectionString(builder.Configuration);
 var options = ConfigurationOptions.Parse(redisConnectionString);
 options.AbortOnConnectFail = false; // Allow retry if connection fails
@@ -200,6 +212,19 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddHangfire(c => c.UseMemoryStorage());
 builder.Services.AddHangfireServer();
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddScoped<IFileUploadService, FileUploadServiceImp>();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IMailService, MailServiceImp>();
+builder.Services.AddExceptionHandler<DefaultExceptionHandler>();
+builder.Services.AddScoped<ScheduledTasks>();
+builder.Services.AddScoped<JwtUtil>();
+builder.Services.AddScoped<IAuthService, AuthServiceImp>();
+builder.Services.AddScoped<ITokenService, TokenServiceImp>();
+builder.Services.AddScoped<IUserService, UserServiceImp>();
+builder.Services.AddScoped<IRedisCacheService, RedisCacheServiceImp>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
