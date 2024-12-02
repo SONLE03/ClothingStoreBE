@@ -17,10 +17,6 @@ namespace FurnitureStoreBE.DTOs.Request.ProductRequest
         public Guid BrandId { get; set; }
         [Required(ErrorMessage = "Category is required.")]
         public Guid CategoryId { get; set; }
-        [Required(ErrorMessage = "Designers are required.")]
-        public HashSet<Guid>? DesignersId { get; set; } 
-        [Required(ErrorMessage = "Materials are required.")]
-        public HashSet<Guid>? MaterialsId { get; set; }
         [Required(ErrorMessage = "Product variants are required.")]
         public HashSet<ProductVariantRequest>? ProductVariants { get; set; }
         [MinValue(0.0)]
@@ -30,18 +26,9 @@ namespace FurnitureStoreBE.DTOs.Request.ProductRequest
     {
         [Required(ErrorMessage = "Color is required.")]
         public Guid ColorId { get; set; }
-        [Required(ErrorMessage = "Length is required.")]
-        [MinValue(0.0)]
-        public decimal Length { get; set; }
-        [Required(ErrorMessage = "Width is required.")]
-        [MinValue(0.0)]
-        public decimal Width { get; set; }
-        [Required(ErrorMessage = "Heights is required.")]
-        [MinValue(0.0)]
+        [Required(ErrorMessage = "Color is required.")]
+        public Guid SizeId { get; set; }
 
-        public decimal Height { get; set; }
-        [Required(ErrorMessage = "Quantity is required.")]
-        [Range(0, int.MaxValue, ErrorMessage = "The quantity must be greater than or equal to {1}.")]
 
         public long Quantity { get; set; }
         [Required(ErrorMessage = "Price is required.")]

@@ -26,6 +26,7 @@ namespace FurnitureStoreBE.Mapper
 
             CreateMap<ProductVariant, ProductVariantResponse>()
                .ForMember(dest => dest.ColorName, otp => otp.MapFrom(src => src.Color.ColorName))
+               .ForMember(dest => dest.SizeName, otp => otp.MapFrom(src => src.Size.SizeName))
                .ForMember(dest => dest.Quantity, otp => otp.MapFrom(src => src.Quantity))
                .ForMember(dest => dest.Price, otp => otp.MapFrom(src => src.Price))
                .ForMember(dest => dest.ImageSource, otp => otp.MapFrom(src => src.Assets.Select(a => a.URL).ToList()));
