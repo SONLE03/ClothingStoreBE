@@ -6,9 +6,11 @@ using FurnitureStoreBE.Models;
 using FurnitureStoreBE.Services;
 using FurnitureStoreBE.Services.Authentication;
 using FurnitureStoreBE.Services.Caching;
+using FurnitureStoreBE.Services.CartService;
 using FurnitureStoreBE.Services.CouponService;
 using FurnitureStoreBE.Services.FileUploadService;
 using FurnitureStoreBE.Services.MailService;
+using FurnitureStoreBE.Services.OrderService;
 using FurnitureStoreBE.Services.ProductService.BrandService;
 using FurnitureStoreBE.Services.ProductService.CategoryService;
 using FurnitureStoreBE.Services.ProductService.ColorService;
@@ -236,6 +238,9 @@ builder.Services.AddScoped<ICategoryService, CategoryServiceImp>();
 builder.Services.AddScoped<ISizeService, SizeServiceImp>();
 builder.Services.AddScoped<IProductService, ProductServiceImp>();
 builder.Services.AddScoped<ICouponService, CouponServiceImp>();
+builder.Services.AddScoped<IOrderItemService, OrderItemServiceImp>();
+builder.Services.AddScoped<IOrderService, OrderServiceImp>();
+
 
 var app = builder.Build();
 

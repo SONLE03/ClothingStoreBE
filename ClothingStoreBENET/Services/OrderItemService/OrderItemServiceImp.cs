@@ -184,7 +184,7 @@ namespace FurnitureStoreBE.Services.CartService
                 var productVariantIndex = await _dbContext.ProductVariants
                     .Include(c => c.Color)
                     .Include(p => p.Product)
-                    .Where(pv => pv.ProductId == existOrderItem.ProductId && pv.ColorId == existOrderItem.ColorId && pv.DisplayDimension.Equals(existOrderItem.Dimension))
+                    .Where(pv => pv.ProductId == existOrderItem.ProductId && pv.ColorId == existOrderItem.ColorId && pv.SizeId == existOrderItem.SizeId)
                     .SingleOrDefaultAsync();
                 if (productVariantIndex == null)
                 {
@@ -223,7 +223,8 @@ namespace FurnitureStoreBE.Services.CartService
                     ColorName = productVariantIndex.Color.ColorName,
                     ProductId = existOrderItem.ProductId,
                     ProductName = productVariantIndex.Product.ProductName,
-                    Dimension = existOrderItem.Dimension,
+                    SizeId = existOrderItem.SizeId,
+                    SizeName = productVariantIndex.Size.SizeName,
                     Price = price,
                     SubTotal = subtotal,
                     Quantity = quantity
