@@ -8,9 +8,10 @@ namespace FurnitureStoreBE.DTOs.Response.OrderResponse
         public Guid Id { get; set; } 
         public Guid ProductId { get; set; }
         public string ProductName { get; set; }
-        public string Dimension { get; set; }
         public Guid ColorId { get; set; }
         public string ColorName { get; set; }
+        public Guid SizeId { get; set; }
+        public string SizeName { get; set; }
         public decimal Price { get; set; }
         public long Quantity { get; set; }
         public decimal SubTotal { get; set; }

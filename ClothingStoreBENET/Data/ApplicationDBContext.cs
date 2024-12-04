@@ -212,6 +212,11 @@ namespace FurnitureStoreBE.Data
                 .WithMany()
                 .HasForeignKey(p => p.ColorId)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<OrderItem>()
+               .HasOne(p => p.Size)
+               .WithMany()
+               .HasForeignKey(p => p.SizeId)
+               .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Order>()
                .HasMany(p => p.OrderItems)
                .WithOne(p => p.Order)

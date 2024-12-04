@@ -13,9 +13,10 @@ namespace FurnitureStoreBE.Models
         public Product Product { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
-        public string Dimension { get; set; }
         public Guid ColorId { get; set; }
         public Color Color { get; set; }
+        public Guid SizeId { get; set; }
+        public Size Size { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public long Quantity { get; set; }

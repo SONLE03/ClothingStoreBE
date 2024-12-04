@@ -39,6 +39,7 @@ namespace FurnitureStoreBE.Mapper
 
             CreateMap<OrderItem, OrderItemResponse>()
                 .ForMember(dest => dest.ColorName, otp => otp.MapFrom(src => src.Color.ColorName))
+                .ForMember(dest => dest.SizeName, otp => otp.MapFrom(src => src.Size.SizeName))
                 .ForMember(dest => dest.ProductName, otp => otp.MapFrom(src => src.Product.ProductName));
 
             CreateMap<Coupon, CouponResponse>()
