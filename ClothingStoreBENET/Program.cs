@@ -254,6 +254,20 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwaggerUI();
     //DatabaseMigrationUtil.DataBaseMigrationInstallation(app);
 }
+using (var scope = app.Services.CreateScope())
+{
+    await DataHelper.ManageDataAsync(scope.ServiceProvider);
+    AppUserSeeder.SeedRootAdminUser(scope, app);
+    var recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+    var scheduledTasks = scope.ServiceProvider.GetRequiredService<ScheduledTasks>();
+
+    recurringJobManager.AddOrUpdate("CouponStatusUpdate",
+        () => scheduledTasks.UpdateCouponStatus(),
+        Cron.Daily(3));
+    //recurringJobManager.AddOrUpdate("BackupDatabase",
+    //    () => scheduledTasks.BackupDatabase(),
+    //    Cron.Minutely);
+}
 
 app.UseCors(x => x
     .AllowAnyOrigin()
