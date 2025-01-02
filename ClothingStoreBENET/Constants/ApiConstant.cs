@@ -27,5 +27,6 @@
         public const string QUESTION = VERSION + "/question";
         public const string ORDER = VERSION + "/order";
         public const string ANALYSIS = VERSION + "/analysis";
+        public const string NOTIFICATION = VERSION + "/notification";
     }
 }

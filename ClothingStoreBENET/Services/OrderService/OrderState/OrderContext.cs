@@ -1,4 +1,5 @@
-﻿using FurnitureStoreBE.Data;
+﻿using ClothingStoreBENET.Services.NotificationService;
+using FurnitureStoreBE.Data;
 using FurnitureStoreBE.DTOs.Request.OrderRequest;
 using FurnitureStoreBE.Models;
 using FurnitureStoreBE.Services.FileUploadService;
@@ -22,9 +23,9 @@ namespace ClothingStoreBENET.Services.OrderService.OrderState
             _currentState = state;
         }
 
-        public Task HandleStatusChange(OrderStatusRequest request, ApplicationDBContext dbContext, IFileUploadService fileUploadService)
+        public Task HandleStatusChange(OrderStatusRequest request, ApplicationDBContext dbContext, IFileUploadService fileUploadService, INotificationService notification)
         {
-            return _currentState.HandleStatusChange(this, request, dbContext, fileUploadService);
+            return _currentState.HandleStatusChange(this, request, dbContext, fileUploadService, notification);
         }
     }
 

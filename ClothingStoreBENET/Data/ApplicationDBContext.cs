@@ -217,13 +217,15 @@ namespace FurnitureStoreBE.Data
                .OnDelete(DeleteBehavior.SetNull);
             // Notification relationship
             modelBuilder.Entity<Notification>()
-               .HasMany(p => p.Users)
+               .HasOne(p => p.User)
                .WithMany(p => p.Notifications)
-               .UsingEntity<Dictionary<string, object>>(
-                   "UserNotification",
-                   j => j.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Restrict),
-                   j => j.HasOne<Notification>().WithMany().HasForeignKey("NotificationId").OnDelete(DeleteBehavior.Restrict));
-
+               .HasForeignKey(p => p.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Notification>()
+             .HasOne(p => p.Order)
+             .WithMany(p => p.Notifications)
+             .HasForeignKey(p => p.OrderId)
+             .OnDelete(DeleteBehavior.Restrict);
             // Order relationship
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.OrderItems)

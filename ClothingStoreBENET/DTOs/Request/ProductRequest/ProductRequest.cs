@@ -24,6 +24,10 @@ namespace FurnitureStoreBE.DTOs.Request.ProductRequest
         [MinValue(0.0)]
         public decimal? Discount { get; set; }
     }
+    public class ProductVariantRe
+    {
+        public List<ProductVariantRequest> ProductVariantRequests { get; set; }
+    }
     public class ProductVariantRequest
     {
         [Required(ErrorMessage = "Color is required.")]
@@ -31,10 +35,7 @@ namespace FurnitureStoreBE.DTOs.Request.ProductRequest
         [Required(ErrorMessage = "Size is required.")]
         public Guid SizeId { get; set; }
 
-        [Required(ErrorMessage = "Price is required.")]
-        [MinValue(0.0)]
         public decimal Price { get; set; }
-        [Required(ErrorMessage = "Images are required.")]
-        public List<IFormFile> Images { get; set; }
+        public List<IFormFile>? Images { get; set; }
     }
 }

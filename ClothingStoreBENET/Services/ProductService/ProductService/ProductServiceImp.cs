@@ -383,6 +383,9 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                         // If the color doesn't exist, throw an exception
                         throw new ObjectNotFoundException($"Color with ID {item.ColorId} not found");
                     }
+                    Console.WriteLine(item.SizeId);
+
+                    Console.WriteLine(item.ColorId);
                     var size = sizes.FirstOrDefault(c => c.Id == item.SizeId);
 
                     if (size == null)
@@ -446,62 +449,69 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
             await using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-
+                // Retrieve the product variant with its related data
                 var productVariant = await _dbContext.ProductVariants
                     .Include(p => p.Product)
                     .ThenInclude(p => p.Asset)
                     .Include(c => c.Color)
                     .Include(s => s.Size)
                     .SingleOrDefaultAsync(p => p.Id == productVariantId);
+
                 if (productVariant == null)
                 {
                     throw new ObjectNotFoundException("Product variant not found");
                 }
-                var colorId = productVariantRequest.ColorId;
-                if (colorId != productVariant.ColorId)
-                {
-                    if (!await _dbContext.Colors.AnyAsync(c => c.Id == colorId))
-                    {
-                        throw new ObjectNotFoundException("Color not found");
-                    }
 
-                }
-                var sizeId = productVariantRequest.SizeId;
-                if (sizeId != productVariant.SizeId)
+                // Check if the color exists and is different from the current color
+                var colorId = productVariantRequest.ColorId;
+                if (colorId != productVariant.ColorId && !await _dbContext.Colors.AnyAsync(c => c.Id == colorId))
                 {
-                    if (!await _dbContext.Sizes.AnyAsync(c => c.Id == sizeId))
-                    {
-                        throw new ObjectNotFoundException("Size not found");
-                    }
+                    throw new ObjectNotFoundException("Color not found");
                 }
-                if (await _dbContext.ProductVariants.AnyAsync(pv => colorId == productVariant.ColorId && pv.SizeId == productVariant.SizeId))
+
+                // Check if the size exists and is different from the current size
+                var sizeId = productVariantRequest.SizeId;
+                if (sizeId != productVariant.SizeId && !await _dbContext.Sizes.AnyAsync(s => s.Id == sizeId))
+                {
+                    throw new ObjectNotFoundException("Size not found");
+                }
+
+                // Ensure no duplicate variant exists with the new color and size combination
+                if (await _dbContext.ProductVariants.AnyAsync(pv => pv.ColorId == colorId && pv.SizeId == sizeId && pv.Id != productVariantId))
                 {
                     throw new BusinessException("Duplicate variant found");
                 }
 
+                // Update the product variant's price
                 var productVariantPrice = productVariantRequest.Price;
                 var minPrice = Math.Min(productVariant.Product.MinPrice, productVariantPrice);
                 var maxPrice = Math.Max(productVariant.Product.MaxPrice, productVariantPrice);
-              
+
+                // Update the variant's properties
                 productVariant.ColorId = colorId;
                 productVariant.SizeId = sizeId;
                 productVariant.Price = productVariantRequest.Price;
 
+                // Update the product's min/max prices if necessary
                 productVariant.Product.MinPrice = minPrice;
                 productVariant.Product.MaxPrice = maxPrice;
+
+                // Commit the changes to the database
                 _dbContext.ProductVariants.Update(productVariant);
                 await _dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
+
+                // Return the updated product response
                 return new ProductResponse
                 {
                     Id = productVariant.Product.Id,
                     ProductName = productVariant.Product.ProductName,
                     Unit = productVariant.Product.Unit,
                     Description = productVariant.Product.Description,
-                    ImageSource = productVariant.Product.Asset.URL,
-                    BrandName = productVariant.Product.Brand.BrandName,
-                    CategoryName = productVariant.Product.Category.CategoryName,
-                    Materials = productVariant.Product.Materials.Select(m => m.MaterialName).ToList(),
+                    ImageSource = productVariant.Product.Asset?.URL,  // Handle potential null for Asset
+                    BrandName = productVariant.Product.Brand?.BrandName,  // Handle potential null for Brand
+                    CategoryName = productVariant.Product.Category?.CategoryName,  // Handle potential null for Category
+                    Materials = productVariant.Product.Materials?.Select(m => m.MaterialName).ToList() ?? new List<string>(),
                     ProductVariants = _mapper.Map<List<ProductVariantResponse>>(productVariant.Product.ProductVariants)
                 };
             }
@@ -511,6 +521,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                 throw;
             }
         }
+
         public async Task DeleteProductVariant(Guid productVariantId)
         {
 

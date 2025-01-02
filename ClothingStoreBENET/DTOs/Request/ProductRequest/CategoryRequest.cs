@@ -8,7 +8,5 @@ namespace FurnitureStoreBE.DTOs.Request.ProductRequest
         public string CategoryName { get; set; }
         public string? Description { get; set; }
         public IFormFile? Image { get; set; }
-
-        public Guid? FurnitureTypeId { get; set; }
     }
 }

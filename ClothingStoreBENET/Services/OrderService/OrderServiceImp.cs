@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using ClothingStoreBENET.Services.NotificationService;
 using ClothingStoreBENET.Services.OrderService.OrderState;
 using FurnitureStoreBE.Common;
 using FurnitureStoreBE.Common.Pagination;
@@ -26,8 +27,9 @@ namespace FurnitureStoreBE.Services.OrderService
         private readonly IRedisCacheService _redisCacheService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IOrderItemService _cartService;
+        private readonly INotificationService _notification;
         public OrderServiceImp(ApplicationDBContext dbContext, IMapper mappers, ICouponService couponService, IRedisCacheService redisCacheService
-            , IFileUploadService fileUploadService, IOrderItemService cartService)
+            , IFileUploadService fileUploadService, IOrderItemService cartService, INotificationService notification)
         {
             _dbContext = dbContext;
             _mappers = mappers;
@@ -35,6 +37,7 @@ namespace FurnitureStoreBE.Services.OrderService
             _redisCacheService = redisCacheService;
             _fileUploadService = fileUploadService;
             _cartService = cartService;
+            _notification = notification;
         }
         private async Task<(Order, List<OrderItem>)> GenerateOrderData(OrderRequest orderRequest)
         {
@@ -175,7 +178,7 @@ namespace FurnitureStoreBE.Services.OrderService
                 //await _dbContext.OrderStatus.AddAsync(orderStatus);
                 var initialState = GetState(order.OrderStatus);
                 var context = new OrderContext(order, initialState);
-                await context.HandleStatusChange(updateOrderStatusRequest, _dbContext, _fileUploadService);
+                await context.HandleStatusChange(updateOrderStatusRequest, _dbContext, _fileUploadService, _notification);
 
                 await _dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();

@@ -79,28 +79,6 @@ namespace ClothingStoreBENET.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notification",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    RedirectUrl = table.Column<string>(type: "text", nullable: false),
-                    Read = table.Column<bool>(type: "boolean", nullable: false),
-                    ENotificationType = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notification", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Size",
                 columns: table => new
                 {
@@ -305,30 +283,6 @@ namespace ClothingStoreBENET.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserNotification",
-                columns: table => new
-                {
-                    NotificationId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserNotification", x => new { x.NotificationId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_UserNotification_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserNotification_Notification_NotificationId",
-                        column: x => x.NotificationId,
-                        principalTable: "Notification",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -714,7 +668,6 @@ namespace ClothingStoreBENET.Migrations
                     Content = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Rate = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -735,6 +688,34 @@ namespace ClothingStoreBENET.Migrations
                         name: "FK_Review_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notification",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notification", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notification_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notification_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1174,6 +1155,16 @@ namespace ClothingStoreBENET.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notification_OrderId",
+                table: "Notification",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notification_UserId",
+                table: "Notification",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_AddressId",
                 table: "Order",
                 column: "AddressId");
@@ -1305,11 +1296,6 @@ namespace ClothingStoreBENET.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserNotification_UserId",
-                table: "UserNotification",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserUsedCoupon_CouponId",
                 table: "UserUsedCoupon",
                 column: "CouponId");
@@ -1434,6 +1420,9 @@ namespace ClothingStoreBENET.Migrations
                 name: "ImportItem");
 
             migrationBuilder.DropTable(
+                name: "Notification");
+
+            migrationBuilder.DropTable(
                 name: "OrderItem");
 
             migrationBuilder.DropTable(
@@ -1444,9 +1433,6 @@ namespace ClothingStoreBENET.Migrations
 
             migrationBuilder.DropTable(
                 name: "Token");
-
-            migrationBuilder.DropTable(
-                name: "UserNotification");
 
             migrationBuilder.DropTable(
                 name: "UserUsedCoupon");
@@ -1468,9 +1454,6 @@ namespace ClothingStoreBENET.Migrations
 
             migrationBuilder.DropTable(
                 name: "Question");
-
-            migrationBuilder.DropTable(
-                name: "Notification");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

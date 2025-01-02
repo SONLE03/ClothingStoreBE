@@ -1,3 +1,4 @@
+using ClothingStoreBENET.Services.NotificationService;
 using FurnitureStoreBE.Common;
 using FurnitureStoreBE.Configurations;
 using FurnitureStoreBE.Data;
@@ -250,6 +251,7 @@ builder.Services.AddScoped<IReviewService, ReviewServiceImp>();
 builder.Services.AddScoped<IImportService, ImportServiceImp>();
 builder.Services.AddScoped<IMaterialService, MaterialServiceImp>();
 builder.Services.AddScoped<IAnalysisService, AnalysisServiceImp>();
+builder.Services.AddScoped<INotificationService, NotificationServiceImp>(); 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())

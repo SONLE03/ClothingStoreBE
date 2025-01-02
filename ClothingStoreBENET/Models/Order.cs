@@ -34,6 +34,8 @@ namespace FurnitureStoreBE.Models
         public decimal AccountsReceivable { get; set; } = 0;
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<OrderStatus> OrderStatuses { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
+
     }
     public class CacheOrder
     {

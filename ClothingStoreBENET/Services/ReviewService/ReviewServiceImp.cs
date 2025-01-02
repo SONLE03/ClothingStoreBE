@@ -38,16 +38,6 @@ namespace FurnitureStoreBE.Services.ReviewService
                 FolderName = EUploadFileFolder.Review.ToString()
             }).ToList();
         }
-
-        // Phương thức tính toán rating mới
-        private (int newRatingCount, float newRatingValue) CalculateNewRating(int currentCount, float currentValue, int newRate)
-        {
-            var newRatingCount = currentCount + 1;
-            float newRatingValue = (currentCount * currentValue + newRate) / newRatingCount;
-            newRatingValue = (float)Math.Round(newRatingValue, 1);
-            return (newRatingCount, newRatingValue);
-        }
-
         // Phương thức để lấy ReviewResponse
         private async Task<ReviewResponse> GetReviewResponseAsync(IQueryable<Review> reviewQuery)
         {
@@ -172,30 +162,12 @@ namespace FurnitureStoreBE.Services.ReviewService
                     ProductId = reviewRequest.ProductId,
                     UserId = reviewRequest.UserId,
                     Content = reviewRequest.Content,
-                    Rate = reviewRequest.Rate,
                 };
                 if (reviewRequest.ReviewImage != null)
                 {
                     review.Asset = await UploadReviewImages(reviewRequest.ReviewImage);
                 }
                 review.setCommonCreate(UserSession.GetUserId());
-
-                //var newRatingCount = product.RatingCount + 1;
-                //var newRatingValue = (product.RatingCount * product.RatingValue + reviewRequest.Rate) / newRatingCount;
-                var (newRatingCount, newRatingValue) = CalculateNewRating(product.RatingCount, product.RatingValue, reviewRequest.Rate);
-
-                var productToUpdate = new Product
-                {
-                    Id = product.Id,
-                    RatingCount = newRatingCount,
-                    RatingValue = newRatingValue
-                };
-
-                _dbContext.Products.Attach(productToUpdate);
-
-                _dbContext.Entry(productToUpdate).Property(p => p.RatingCount).IsModified = true;
-                _dbContext.Entry(productToUpdate).Property(p => p.RatingValue).IsModified = true;
-
                 await _dbContext.Reviews.AddAsync(review);
                 await _dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -239,21 +211,6 @@ namespace FurnitureStoreBE.Services.ReviewService
                 {
                     review.Review.Asset = await UploadReviewImages(reviewRequest.ReviewImage);
                 }
-
-                // Cập nhật rating
-                var (newRatingCount, newRatingValue) = CalculateNewRating(review.Product.RatingCount, review.Product.RatingValue, reviewRequest.Rate);
-
-                // Cập nhật sản phẩm
-                var productToUpdate = new Product
-                {
-                    Id = review.Product.Id,
-                    RatingCount = newRatingCount,
-                    RatingValue = newRatingValue
-                };
-
-                _dbContext.Products.Attach(productToUpdate);
-                _dbContext.Entry(productToUpdate).Property(p => p.RatingCount).IsModified = true;
-                _dbContext.Entry(productToUpdate).Property(p => p.RatingValue).IsModified = true;
 
                 // Gắn review vào ngữ cảnh
                 _dbContext.Reviews.Update(review.Review); // Update toàn bộ review

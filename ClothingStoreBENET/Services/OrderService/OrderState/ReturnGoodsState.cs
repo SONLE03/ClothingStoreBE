@@ -1,4 +1,6 @@
-﻿using FurnitureStoreBE.Data;
+﻿using ClothingStoreBENET.DTOs.Request.NotificationRequest;
+using ClothingStoreBENET.Services.NotificationService;
+using FurnitureStoreBE.Data;
 using FurnitureStoreBE.DTOs.Request.OrderRequest;
 using FurnitureStoreBE.Enums;
 using FurnitureStoreBE.Models;
@@ -8,8 +10,10 @@ namespace ClothingStoreBENET.Services.OrderService.OrderState
 {
     public class ReturnGoodsState : IOrderState
     {
-        public async Task HandleStatusChange(OrderContext context, OrderStatusRequest request, ApplicationDBContext dbContext, IFileUploadService fileUploadService)
+        public async Task HandleStatusChange(OrderContext context, OrderStatusRequest request, ApplicationDBContext dbContext, IFileUploadService fileUploadService, INotificationService notification)
         {
+            var status = request.EOrderStatus;
+
             context.Order.OrderStatus = request.EOrderStatus;
 
             var orderStatus = new OrderStatus
@@ -19,7 +23,14 @@ namespace ClothingStoreBENET.Services.OrderService.OrderState
                 Status = request.EOrderStatus,
                 Note = request.Note,
             };
-
+            var notificationRequest = new NotificationRequest
+            {
+                Title = "Order status update notification",
+                Content = $"Order number {context.Order.Id} is updated to status {status}",
+                OrderId = context.Order.Id,
+                UserId = context.Order.UserId
+            };
+            await notification.CreateNotification(notificationRequest);
             if (request.Images != null)
             {
                 var uploadResult = await fileUploadService.UploadFilesAsync(request.Images, EUploadFileFolder.OrderStatus.ToString());

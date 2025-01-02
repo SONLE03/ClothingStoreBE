@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClothingStoreBENET.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250102074411_InitialCreate")]
+    [Migration("20250102195343_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -572,39 +572,25 @@ namespace ClothingStoreBENET.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("ENotificationType")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("Read")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("RedirectUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UpdatedBy")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Notification");
                 });
@@ -1071,9 +1057,6 @@ namespace ClothingStoreBENET.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Rate")
-                        .HasColumnType("integer");
-
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
@@ -1412,21 +1395,6 @@ namespace ClothingStoreBENET.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductMaterial");
-                });
-
-            modelBuilder.Entity("UserNotification", b =>
-                {
-                    b.Property<Guid>("NotificationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("NotificationId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserNotification");
                 });
 
             modelBuilder.Entity("FurnitureStoreBE.Models.AspNetRoleClaims<string>", b =>
@@ -2536,6 +2504,25 @@ namespace ClothingStoreBENET.Migrations
                     b.Navigation("Asset");
                 });
 
+            modelBuilder.Entity("FurnitureStoreBE.Models.Notification", b =>
+                {
+                    b.HasOne("FurnitureStoreBE.Models.Order", "Order")
+                        .WithMany("Notifications")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FurnitureStoreBE.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("FurnitureStoreBE.Models.Order", b =>
                 {
                     b.HasOne("FurnitureStoreBE.Models.Address", "Address")
@@ -2846,21 +2833,6 @@ namespace ClothingStoreBENET.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UserNotification", b =>
-                {
-                    b.HasOne("FurnitureStoreBE.Models.Notification", null)
-                        .WithMany()
-                        .HasForeignKey("NotificationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("FurnitureStoreBE.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FurnitureStoreBE.Models.AspNetRoleClaims<string>", b =>
                 {
                     b.HasOne("FurnitureStoreBE.Models.AspNetTypeClaims", "AspNetTypeClaims")
@@ -2930,6 +2902,8 @@ namespace ClothingStoreBENET.Migrations
 
             modelBuilder.Entity("FurnitureStoreBE.Models.Order", b =>
                 {
+                    b.Navigation("Notifications");
+
                     b.Navigation("OrderItems");
 
                     b.Navigation("OrderStatuses");
@@ -2985,6 +2959,8 @@ namespace ClothingStoreBENET.Migrations
                         .IsRequired();
 
                     b.Navigation("Favorites");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("OrderItems");
 
