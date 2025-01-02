@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using ClothingStoreBENET.Services.OrderService.OrderState;
 using FurnitureStoreBE.Common;
 using FurnitureStoreBE.Common.Pagination;
 using FurnitureStoreBE.Data;
@@ -150,28 +151,32 @@ namespace FurnitureStoreBE.Services.OrderService
                 {
                     throw new ObjectNotFoundException("Order not found");
                 }
-                order.OrderStatus = updateOrderStatusRequest.EOrderStatus;
-                var orderStatus = new OrderStatus
-                {
-                    Order = order,
-                    ShipperId = updateOrderStatusRequest.ShipperId,
-                    Status = updateOrderStatusRequest.EOrderStatus,
-                    Note = updateOrderStatusRequest.Note,
-                };
-                if (updateOrderStatusRequest.Images != null)
-                {
-                    var productVariantImagesUploadResult = await _fileUploadService.UploadFilesAsync(updateOrderStatusRequest.Images, EUploadFileFolder.OrderStatus.ToString());
-                    var assets = productVariantImagesUploadResult.Select(img => new Asset
-                    {
-                        Name = img.OriginalFilename,
-                        URL = img.Url.ToString(),
-                        CloudinaryId = img.PublicId,
-                        FolderName = EUploadFileFolder.OrderStatus.ToString()
-                    }).ToList();
-                    orderStatus.Asset = assets;
-                }
-                _dbContext.Orders.Update(order);
-                await _dbContext.OrderStatus.AddAsync(orderStatus);
+                //order.OrderStatus = updateOrderStatusRequest.EOrderStatus;
+                //var orderStatus = new OrderStatus
+                //{
+                //    Order = order,
+                //    ShipperId = updateOrderStatusRequest.ShipperId,
+                //    Status = updateOrderStatusRequest.EOrderStatus,
+                //    Note = updateOrderStatusRequest.Note,
+                //};
+                //if (updateOrderStatusRequest.Images != null)
+                //{
+                //    var productVariantImagesUploadResult = await _fileUploadService.UploadFilesAsync(updateOrderStatusRequest.Images, EUploadFileFolder.OrderStatus.ToString());
+                //    var assets = productVariantImagesUploadResult.Select(img => new Asset
+                //    {
+                //        Name = img.OriginalFilename,
+                //        URL = img.Url.ToString(),
+                //        CloudinaryId = img.PublicId,
+                //        FolderName = EUploadFileFolder.OrderStatus.ToString()
+                //    }).ToList();
+                //    orderStatus.Asset = assets;
+                //}
+                //_dbContext.Orders.Update(order);
+                //await _dbContext.OrderStatus.AddAsync(orderStatus);
+                var initialState = GetState(order.OrderStatus);
+                var context = new OrderContext(order, initialState);
+                await context.HandleStatusChange(updateOrderStatusRequest, _dbContext, _fileUploadService);
+
                 await _dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return _mappers.Map<OrderResponse>(order);
@@ -181,6 +186,22 @@ namespace FurnitureStoreBE.Services.OrderService
                 await transaction.RollbackAsync();
                 throw;
             }
+        }
+        private IOrderState GetState(EOrderStatus orderStatus)
+        {
+            return orderStatus switch
+            {
+                EOrderStatus.Pending => new PendingState(),
+                EOrderStatus.Paid => new PaidState(),
+                EOrderStatus.Confirmed => new ConfirmedState(),
+                EOrderStatus.Canceled => new CanceledState(),
+                EOrderStatus.DeliveryToShipper => new DeliveryToShipperState(),
+                EOrderStatus.Delivering => new DeliveringState(),
+                EOrderStatus.Completed => new CompletedState(),
+                EOrderStatus.ReturnGoods => new ReturnGoodsState(),
+                EOrderStatus.Refund => new RefundState(),
+                _ => throw new InvalidOperationException("Invalid state"),
+            };
         }
     }
 }
