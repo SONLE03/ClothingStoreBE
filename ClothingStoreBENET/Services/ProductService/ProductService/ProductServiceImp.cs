@@ -356,11 +356,12 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
 
                 if (variants == null || !variants.Any())
                 {
-                    throw new ObjectNotFoundException("Variable product must have at least one attribute");
+                    throw new InvalidOperationException("Product variants request must contain at least one item.");
                 }
 
-                var minPrice = Math.Min(product.MinPrice, variants.Min(p => p.Price));
-                var maxPrice = Math.Max(product.MaxPrice, variants.Max(p => p.Price));
+                var minPrice = Math.Min(product.MinPrice, variants.Any() ? variants.Min(p => p.Price) : product.MinPrice);
+                var maxPrice = Math.Max(product.MaxPrice, variants.Any() ? variants.Max(p => p.Price) : product.MaxPrice);
+
 
                 // Các truy vấn khác như kiểm tra Color, Size
                 var colorIds = variants.Select(v => v.ColorId).ToList();
@@ -447,6 +448,8 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
             {
 
                 var productVariant = await _dbContext.ProductVariants
+                    .Include(p => p.Product)
+                    .ThenInclude(p => p.Asset)
                     .Include(c => c.Color)
                     .Include(s => s.Size)
                     .SingleOrDefaultAsync(p => p.Id == productVariantId);
@@ -471,7 +474,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                         throw new ObjectNotFoundException("Size not found");
                     }
                 }
-                if (!await _dbContext.ProductVariants.AnyAsync(pv => colorId == productVariant.ColorId && pv.SizeId == productVariant.SizeId))
+                if (await _dbContext.ProductVariants.AnyAsync(pv => colorId == productVariant.ColorId && pv.SizeId == productVariant.SizeId))
                 {
                     throw new BusinessException("Duplicate variant found");
                 }

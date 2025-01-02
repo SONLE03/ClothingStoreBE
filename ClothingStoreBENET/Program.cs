@@ -4,6 +4,7 @@ using FurnitureStoreBE.Data;
 using FurnitureStoreBE.Exceptions;
 using FurnitureStoreBE.Models;
 using FurnitureStoreBE.Services;
+using FurnitureStoreBE.Services.AnalyticsService;
 using FurnitureStoreBE.Services.Authentication;
 using FurnitureStoreBE.Services.Caching;
 using FurnitureStoreBE.Services.CartService;
@@ -248,7 +249,7 @@ builder.Services.AddScoped<IQuestionService, QuestionServiceImp>();
 builder.Services.AddScoped<IReviewService, ReviewServiceImp>();
 builder.Services.AddScoped<IImportService, ImportServiceImp>();
 builder.Services.AddScoped<IMaterialService, MaterialServiceImp>();
-
+builder.Services.AddScoped<IAnalysisService, AnalysisServiceImp>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
@@ -278,6 +279,9 @@ app.UseCors(x => x
     .AllowAnyHeader());
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler(opt => { });
 app.MapControllers();
+app.UseMiddleware<LoggingMiddleware>();
+app.UseMiddleware<HeaderCheckMiddleware>();
 app.UseHangfireDashboard();
 app.Run();
