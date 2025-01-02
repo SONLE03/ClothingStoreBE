@@ -22,6 +22,7 @@ namespace FurnitureStoreBE.Models
         public Review? Review { get; set; }
         public Coupon? Coupon { get; set; }
         public Product? Product { get; set; }
+        public Material? Material { get; set; }
 
     }
 }

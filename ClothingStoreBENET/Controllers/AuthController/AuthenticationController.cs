@@ -56,9 +56,9 @@ namespace FurnitureStoreBE.Controllers.AuthController
         {
             return new SuccessfulResponse<object>(await _authenticationService.HandleRefreshToken(tokenRequest), (int)HttpStatusCode.OK, "Refresh token successfully").GetResponse();
         }
-        [HttpPost("me")]
+        [HttpPost("me/{userId}")]
         [Authorize]
-        public async Task<IActionResult> GetMe([FromBody] string userId)
+        public async Task<IActionResult> GetMe(string userId)
         {
             return new SuccessfulResponse<object>(await _authenticationService.GetMe(userId), (int)HttpStatusCode.OK, "Get me successfully").GetResponse();
         }

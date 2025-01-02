@@ -48,16 +48,34 @@ namespace ClothingStoreBENET.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ColorName = table.Column<string>(type: "text", nullable: false),
                     ColorCode = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Color", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ImportInvoice",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Total = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImportInvoice", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,12 +88,12 @@ namespace ClothingStoreBENET.Migrations
                     RedirectUrl = table.Column<string>(type: "text", nullable: false),
                     Read = table.Column<bool>(type: "boolean", nullable: false),
                     ENotificationType = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -88,12 +106,15 @@ namespace ClothingStoreBENET.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SizeName = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Length = table.Column<int>(type: "integer", nullable: false),
+                    Width = table.Column<int>(type: "integer", nullable: false),
+                    HumanHeight = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -201,7 +222,7 @@ namespace ClothingStoreBENET.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     FullName = table.Column<string>(type: "text", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "date", nullable: true),
                     AssetId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: true),
                     IsLocked = table.Column<bool>(type: "boolean", nullable: true),
@@ -336,12 +357,12 @@ namespace ClothingStoreBENET.Migrations
                     BrandName = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     AssetId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -361,12 +382,12 @@ namespace ClothingStoreBENET.Migrations
                     CategoryName = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     AssetId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -390,22 +411,47 @@ namespace ClothingStoreBENET.Migrations
                     UsageCount = table.Column<long>(type: "bigint", nullable: false),
                     MinOrderValue = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     DiscountValue = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "date", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "date", nullable: false),
                     ECouponType = table.Column<int>(type: "integer", nullable: false),
                     ECouponStatus = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Coupon", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Coupon_Asset_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Asset",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Material",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    MaterialName = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    AssetId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Material", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Material_Asset_AssetId",
                         column: x => x.AssetId,
                         principalTable: "Asset",
                         principalColumn: "Id");
@@ -429,12 +475,12 @@ namespace ClothingStoreBENET.Migrations
                     AssetId = table.Column<Guid>(type: "uuid", nullable: true),
                     BrandId = table.Column<Guid>(type: "uuid", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -479,12 +525,12 @@ namespace ClothingStoreBENET.Migrations
                     SubTotal = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     Total = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     AccountsReceivable = table.Column<decimal>(type: "numeric", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -540,12 +586,12 @@ namespace ClothingStoreBENET.Migrations
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -565,6 +611,30 @@ namespace ClothingStoreBENET.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductMaterial",
+                columns: table => new
+                {
+                    MaterialId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductMaterial", x => new { x.MaterialId, x.ProductId });
+                    table.ForeignKey(
+                        name: "FK_ProductMaterial_Material_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Material",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductMaterial_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductVariant",
                 columns: table => new
                 {
@@ -574,12 +644,12 @@ namespace ClothingStoreBENET.Migrations
                     SizeId = table.Column<Guid>(type: "uuid", nullable: false),
                     Quantity = table.Column<long>(type: "bigint", nullable: false),
                     Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -612,12 +682,12 @@ namespace ClothingStoreBENET.Migrations
                     Content = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -645,12 +715,12 @@ namespace ClothingStoreBENET.Migrations
                     UserId = table.Column<string>(type: "text", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     Rate = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -676,8 +746,8 @@ namespace ClothingStoreBENET.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false),
-                    Dimension = table.Column<string>(type: "text", nullable: false),
                     ColorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SizeId = table.Column<Guid>(type: "uuid", nullable: false),
                     Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     Quantity = table.Column<long>(type: "bigint", nullable: false),
                     SubTotal = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
@@ -717,6 +787,12 @@ namespace ClothingStoreBENET.Migrations
                         principalTable: "Product",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrderItem_Size_SizeId",
+                        column: x => x.SizeId,
+                        principalTable: "Size",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -729,12 +805,12 @@ namespace ClothingStoreBENET.Migrations
                     UserId = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     Note = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -753,6 +829,33 @@ namespace ClothingStoreBENET.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ImportItem",
+                columns: table => new
+                {
+                    ImportInvoiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductVariantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Quantity = table.Column<long>(type: "bigint", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    Total = table.Column<decimal>(type: "numeric(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImportItem", x => new { x.ProductVariantId, x.ImportInvoiceId });
+                    table.ForeignKey(
+                        name: "FK_ImportItem_ImportInvoice_ImportInvoiceId",
+                        column: x => x.ImportInvoiceId,
+                        principalTable: "ImportInvoice",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ImportItem_ProductVariant_ProductVariantId",
+                        column: x => x.ProductVariantId,
+                        principalTable: "ProductVariant",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reply",
                 columns: table => new
                 {
@@ -761,12 +864,12 @@ namespace ClothingStoreBENET.Migrations
                     UserId = table.Column<string>(type: "text", nullable: false),
                     ReviewId = table.Column<Guid>(type: "uuid", nullable: true),
                     QuestionId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1060,6 +1163,17 @@ namespace ClothingStoreBENET.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ImportItem_ImportInvoiceId",
+                table: "ImportItem",
+                column: "ImportInvoiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Material_AssetId",
+                table: "Material",
+                column: "AssetId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_AddressId",
                 table: "Order",
                 column: "AddressId");
@@ -1095,6 +1209,11 @@ namespace ClothingStoreBENET.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderItem_SizeId",
+                table: "OrderItem",
+                column: "SizeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_UserId",
                 table: "OrderItem",
                 column: "UserId");
@@ -1124,6 +1243,11 @@ namespace ClothingStoreBENET.Migrations
                 name: "IX_Product_CategoryId",
                 table: "Product",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductMaterial_ProductId",
+                table: "ProductMaterial",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductVariant_ColorId",
@@ -1307,7 +1431,13 @@ namespace ClothingStoreBENET.Migrations
                 name: "Favorite");
 
             migrationBuilder.DropTable(
+                name: "ImportItem");
+
+            migrationBuilder.DropTable(
                 name: "OrderItem");
+
+            migrationBuilder.DropTable(
+                name: "ProductMaterial");
 
             migrationBuilder.DropTable(
                 name: "Reply");
@@ -1328,7 +1458,13 @@ namespace ClothingStoreBENET.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "ImportInvoice");
+
+            migrationBuilder.DropTable(
                 name: "Cart");
+
+            migrationBuilder.DropTable(
+                name: "Material");
 
             migrationBuilder.DropTable(
                 name: "Question");

@@ -9,6 +9,7 @@ using FurnitureStoreBE.DTOs.Response.CouponResponse;
 using FurnitureStoreBE.DTOs.Response.ReviewResponse;
 using FurnitureStoreBE.DTOs.Response.ReplyResponses;
 using FurnitureStoreBE.DTOs.Response.QuestionResponse;
+using FurnitureStoreBE.DTOs.Response.ImportResponse;
 namespace FurnitureStoreBE.Mapper
 {
     public class AutoMapperConfig : Profile
@@ -16,11 +17,12 @@ namespace FurnitureStoreBE.Mapper
         public AutoMapperConfig()
         {
             CreateMap<AspNetTypeClaims, TypeClaimsResponse>();
-            CreateMap<User,  UserResponse>();
+            CreateMap<User, UserResponse>().ForMember(dest => dest.ImageSource, opt => opt.MapFrom(src => src.Asset.URL));
             CreateMap<Address, AddressResponse>();
             CreateMap<Color, ColorResponse>();
             CreateMap<Size, SizeResponse>();
             CreateMap<Brand, BrandResponse>().ForMember(dest => dest.ImageSource, opt => opt.MapFrom(src => src.Asset.URL));
+            CreateMap<Material, MaterialResponse>().ForMember(dest => dest.ImageSource, opt => opt.MapFrom(src => src.Asset.URL));
             CreateMap<Category, CategoryResponse>().ForMember(dest => dest.ImageSource, opt => opt.MapFrom(src => src.Asset.URL));
          
 
@@ -34,6 +36,7 @@ namespace FurnitureStoreBE.Mapper
             CreateMap<Product, ProductResponse>().ForMember(dest => dest.ImageSource, otp => otp.MapFrom(src => src.Asset.URL))
                 .ForMember(dest => dest.CategoryName, otp => otp.MapFrom(src => src.Category.CategoryName))
                 .ForMember(dest => dest.BrandName, otp => otp.MapFrom(src => src.Brand.BrandName))
+                .ForMember(dest => dest.Materials, otp => otp.MapFrom(src => src.Materials.Select(m => m.MaterialName)))
                 .ForMember(dest => dest.DisplayPrice, otp => otp.MapFrom(src => $"{src.MinPrice} - {src.MaxPrice}"))
                 .ForMember(dest => dest.ProductVariants, otp => otp.MapFrom(src => src.ProductVariants));
 
@@ -68,7 +71,10 @@ namespace FurnitureStoreBE.Mapper
                 .ForMember(dest => dest.PaymentMethod, otp => otp.MapFrom(src => src.PaymentMethod.ToString()))
                 .ForMember(dest => dest.OrderStatus, otp => otp.MapFrom(src => src.OrderStatus.ToString()))
                 .ForMember(dest => dest.OrderItemResponses, otp => otp.MapFrom(src => src.OrderItems));
-
+            CreateMap<ImportInvoice, ImportResponse>()
+                .ForMember(dest => dest.ImportItemResponse, otp => otp.MapFrom(src => src.ImportItem));
+            CreateMap<ImportItem, ImportItemResponse>()
+                .ForMember(dest => dest.ProductName, otp => otp.MapFrom(src => src.ProductVariant.Product.ProductName));
         }
     }
 }

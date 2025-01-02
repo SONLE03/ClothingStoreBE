@@ -30,6 +30,7 @@ namespace FurnitureStoreBE.Models
         public Brand? Brand { get; set; }
         public Guid? CategoryId { get; set; }
         public Category? Category { get; set; }
+        public ICollection<Material>? Materials { get; set; }
         public ICollection<ProductVariant>? ProductVariants { get; set; }
         public ICollection<Review>? Reviews { get; set; }
         public ICollection<Question>? Questions { get; set; }

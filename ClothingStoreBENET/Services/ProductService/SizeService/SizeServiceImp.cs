@@ -38,7 +38,13 @@ namespace FurnitureStoreBE.Services.ProductService.SizeService
             await using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                var size = new Size { SizeName = sizeRequest.SizeName};
+                var size = new Size 
+                { 
+                    SizeName = sizeRequest.SizeName,
+                    HumanHeight = sizeRequest.HumanHeight,
+                    Length = sizeRequest.Length,
+                    Width = sizeRequest.Width,
+                };
                 size.setCommonCreate(UserSession.GetUserId());
                 await _dbContext.Sizes.AddAsync(size);
                 await _dbContext.SaveChangesAsync();
@@ -56,6 +62,9 @@ namespace FurnitureStoreBE.Services.ProductService.SizeService
             var size = await _dbContext.Sizes.FirstAsync(b => b.Id == id);
             if (size == null) throw new ObjectNotFoundException("Size not found");
             size.SizeName = sizeRequest.SizeName;
+            size.Width = sizeRequest.Width;
+            size.HumanHeight = sizeRequest.HumanHeight;
+            size.Length = sizeRequest.Length;
             size.setCommonUpdate(UserSession.GetUserId());
             _dbContext.Sizes.Update(size);
             await _dbContext.SaveChangesAsync();

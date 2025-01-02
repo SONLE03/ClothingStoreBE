@@ -9,6 +9,9 @@ namespace FurnitureStoreBE.Models
         [Key]
         public Guid Id { get; set; }
         public string? SizeName { get; set; }
+        public int Length { get; set; }
+        public int Width { get; set; }
+        public int HumanHeight { get; set; }
         public ICollection<ProductVariant>? ProductVariants { get; set; }
     }
 }

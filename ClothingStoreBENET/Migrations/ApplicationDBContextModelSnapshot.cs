@@ -238,10 +238,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -253,7 +253,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -298,10 +298,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -313,7 +313,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -340,10 +340,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -352,7 +352,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -376,10 +376,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -394,7 +394,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -406,13 +406,13 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("UsageCount")
                         .HasColumnType("bigint");
@@ -440,10 +440,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -452,13 +452,111 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("UserId", "ProductId");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("Favorite");
+                });
+
+            modelBuilder.Entity("FurnitureStoreBE.Models.ImportInvoice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImportInvoice");
+                });
+
+            modelBuilder.Entity("FurnitureStoreBE.Models.ImportItem", b =>
+                {
+                    b.Property<Guid>("ProductVariantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ImportInvoiceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ProductVariantId", "ImportInvoiceId");
+
+                    b.HasIndex("ImportInvoiceId");
+
+                    b.ToTable("ImportItem");
+                });
+
+            modelBuilder.Entity("FurnitureStoreBE.Models.Material", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("MaterialName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId")
+                        .IsUnique();
+
+                    b.ToTable("Material");
                 });
 
             modelBuilder.Entity("FurnitureStoreBE.Models.Notification", b =>
@@ -475,10 +573,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("ENotificationType")
                         .HasColumnType("integer");
@@ -501,7 +599,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -533,10 +631,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeliveredAt")
                         .HasColumnType("timestamp with time zone");
@@ -577,7 +675,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -606,10 +704,6 @@ namespace ClothingStoreBENET.Migrations
                     b.Property<Guid>("ColorId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Dimension")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid?>("OrderId")
                         .HasColumnType("uuid");
 
@@ -621,6 +715,9 @@ namespace ClothingStoreBENET.Migrations
 
                     b.Property<long>("Quantity")
                         .HasColumnType("bigint");
+
+                    b.Property<Guid>("SizeId")
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(18,2)");
@@ -639,6 +736,8 @@ namespace ClothingStoreBENET.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("SizeId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("OrderItem");
@@ -654,10 +753,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -678,7 +777,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -711,10 +810,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -755,7 +854,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -782,10 +881,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -806,7 +905,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -833,10 +932,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -848,7 +947,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -909,10 +1008,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -927,7 +1026,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -958,10 +1057,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -976,7 +1075,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -1001,13 +1100,19 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("HumanHeight")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
+
+                    b.Property<int>("Length")
+                        .HasColumnType("integer");
 
                     b.Property<string>("SizeName")
                         .HasColumnType("text");
@@ -1016,7 +1121,10 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -1039,7 +1147,7 @@ namespace ClothingStoreBENET.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -1286,6 +1394,21 @@ namespace ClothingStoreBENET.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("ProductMaterial", b =>
+                {
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("MaterialId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductMaterial");
                 });
 
             modelBuilder.Entity("UserNotification", b =>
@@ -2382,6 +2505,34 @@ namespace ClothingStoreBENET.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FurnitureStoreBE.Models.ImportItem", b =>
+                {
+                    b.HasOne("FurnitureStoreBE.Models.ImportInvoice", "ImportInvoice")
+                        .WithMany("ImportItem")
+                        .HasForeignKey("ImportInvoiceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FurnitureStoreBE.Models.ProductVariant", "ProductVariant")
+                        .WithMany("ImportItem")
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ImportInvoice");
+
+                    b.Navigation("ProductVariant");
+                });
+
+            modelBuilder.Entity("FurnitureStoreBE.Models.Material", b =>
+                {
+                    b.HasOne("FurnitureStoreBE.Models.Asset", "Asset")
+                        .WithOne("Material")
+                        .HasForeignKey("FurnitureStoreBE.Models.Material", "AssetId");
+
+                    b.Navigation("Asset");
+                });
+
             modelBuilder.Entity("FurnitureStoreBE.Models.Order", b =>
                 {
                     b.HasOne("FurnitureStoreBE.Models.Address", "Address")
@@ -2432,6 +2583,12 @@ namespace ClothingStoreBENET.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("FurnitureStoreBE.Models.Size", "Size")
+                        .WithMany()
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FurnitureStoreBE.Models.User", "User")
                         .WithMany("OrderItems")
                         .HasForeignKey("UserId")
@@ -2445,6 +2602,8 @@ namespace ClothingStoreBENET.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Size");
 
                     b.Navigation("User");
                 });
@@ -2669,6 +2828,21 @@ namespace ClothingStoreBENET.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProductMaterial", b =>
+                {
+                    b.HasOne("FurnitureStoreBE.Models.Material", null)
+                        .WithMany()
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FurnitureStoreBE.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("UserNotification", b =>
                 {
                     b.HasOne("FurnitureStoreBE.Models.Notification", null)
@@ -2712,6 +2886,8 @@ namespace ClothingStoreBENET.Migrations
 
                     b.Navigation("Coupon");
 
+                    b.Navigation("Material");
+
                     b.Navigation("Product");
 
                     b.Navigation("User");
@@ -2744,6 +2920,11 @@ namespace ClothingStoreBENET.Migrations
                     b.Navigation("UserUsedCoupon");
                 });
 
+            modelBuilder.Entity("FurnitureStoreBE.Models.ImportInvoice", b =>
+                {
+                    b.Navigation("ImportItem");
+                });
+
             modelBuilder.Entity("FurnitureStoreBE.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
@@ -2772,6 +2953,8 @@ namespace ClothingStoreBENET.Migrations
             modelBuilder.Entity("FurnitureStoreBE.Models.ProductVariant", b =>
                 {
                     b.Navigation("Assets");
+
+                    b.Navigation("ImportItem");
                 });
 
             modelBuilder.Entity("FurnitureStoreBE.Models.Question", b =>

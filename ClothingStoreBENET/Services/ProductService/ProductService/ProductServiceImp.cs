@@ -39,6 +39,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     Description = product.Description,
                     BrandName = product.Brand != null ? product.Brand.BrandName : null,
                     CategoryName = product.Category != null ? product.Category.CategoryName : null,
+                    Materials = product.Materials.Select(m => m.MaterialName).ToList(),
                     DisplayPrice = $"{product.MinPrice} - {product.MaxPrice}",
                     Discount = product.Discount,
                     ProductVariants = product.ProductVariants
@@ -113,6 +114,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     CategoryName = product.Category != null ? product.Category.CategoryName : null, // Ternary operator for Category
                     DisplayPrice = $"{product.MinPrice} - {product.MaxPrice}",
                     Discount = product.Discount,
+                    Materials = product.Materials.Select(m => m.MaterialName).ToList(),
                     ProductVariants = product.ProductVariants
                         .Where(pv => !pv.IsDeleted) // Filter to get only non-deleted variants
                         .Select(v => new ProductVariantResponse
@@ -173,7 +175,10 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                 var sizes = await _dbContext.Sizes
                     .Where(c => sizeIds.Contains(c.Id))
                     .ToListAsync();
-
+                var materials = await _dbContext.Materials
+                    .Where(m => productRequest.MaterialsId
+                    .Contains(m.Id))
+                    .ToListAsync();
                 var uniqueVariants = new HashSet<string>();
 
                 // Tải lên ảnh của từng biến thể sản phẩm
@@ -215,7 +220,6 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     {
                         Color = color,
                         Size = size,
-                        Quantity = item.Quantity,
                         Price = item.Price,
                         Assets = assets
                     });
@@ -241,7 +245,8 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     ProductVariants = productVariants,
                     Description = productRequest.Description,
                     Asset = asset,
-                    Unit = productRequest.Unit
+                    Unit = productRequest.Unit,
+                    Materials = materials,
                 };
 
                 product.setCommonCreate(UserSession.GetUserId());
@@ -264,13 +269,13 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
             try
             {
                 if (!await _dbContext.Products.AnyAsync(b => b.Id == productId)) throw new ObjectNotFoundException("Product not found");
-                var sqlDelete = "DELETE FROM \"Product\" WHERE \"Id\" = @p0";
-                int affectedRows = await _dbContext.Database.ExecuteSqlRawAsync(sqlDelete, productId);
-                if (affectedRows == 0)
-                {
-                    var sqlUpdate = "UPDATE \"Brand\" SET \"IsDeleted\" = @p0 WHERE \"Id\" = @p1"; // Sử dụng dấu ngoặc kép
+                //var sqlDelete = "DELETE FROM \"Product\" WHERE \"Id\" = @p0";
+                //int affectedRows = await _dbContext.Database.ExecuteSqlRawAsync(sqlDelete, productId);
+                //if (affectedRows == 0)
+                //{
+                    var sqlUpdate = "UPDATE \"Product\" SET \"IsDeleted\" = @p0 WHERE \"Id\" = @p1"; // Sử dụng dấu ngoặc kép
                     await _dbContext.Database.ExecuteSqlRawAsync(sqlUpdate, true, productId);
-                }
+                //}
             }
             catch
             {
@@ -291,6 +296,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     .Include(a => a.Asset)
                     .Include(b => b.Brand)
                     .Include(c => c.Category)
+                    .Include(m => m.Materials)
                     .SingleOrDefaultAsync(b => b.Id == productId);
 
                 if (productRequest.BrandId != product.BrandId)
@@ -311,9 +317,13 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     }
                     product.Category = category;
                 }
-              
+                var materials = await _dbContext.Materials
+                     .Where(m => productRequest.MaterialsId
+                     .Contains(m.Id))
+                     .ToListAsync();
                 decimal discount = productRequest.Discount.HasValue ? productRequest.Discount.Value : 0;
                 product.Discount = discount;
+                product.Materials = materials;
                 product.Description = productRequest.Description;
                 product.setCommonUpdate(UserSession.GetUserId());
                 _dbContext.Products.Update(product);
@@ -339,6 +349,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     .Include(a => a.Asset)
                     .Include(b => b.Brand)
                     .Include(c => c.Category)
+                    .Include(m => m.Materials)
                     .SingleOrDefaultAsync(p => p.Id == productId);
                
                 var variants = productVariantsRequest;
@@ -400,7 +411,6 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                         ProductId = product.Id,
                         Color = color,
                         Size = size,
-                        Quantity = item.Quantity,
                         Price = item.Price,
                         Assets = assets
                     });
@@ -419,6 +429,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     Description = product.Description,
                     ImageSource = product.Asset.URL,
                     BrandName = product.Brand.BrandName,
+                    Materials = product.Materials.Select(m => m.MaterialName).ToList(),
                     CategoryName = product.Category.CategoryName,
                     ProductVariants = _mapper.Map<List<ProductVariantResponse>>(product.ProductVariants)
                 };
@@ -437,6 +448,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
 
                 var productVariant = await _dbContext.ProductVariants
                     .Include(c => c.Color)
+                    .Include(s => s.Size)
                     .SingleOrDefaultAsync(p => p.Id == productVariantId);
                 if (productVariant == null)
                 {
@@ -458,7 +470,6 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     {
                         throw new ObjectNotFoundException("Size not found");
                     }
-
                 }
                 if (!await _dbContext.ProductVariants.AnyAsync(pv => colorId == productVariant.ColorId && pv.SizeId == productVariant.SizeId))
                 {
@@ -471,7 +482,6 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
               
                 productVariant.ColorId = colorId;
                 productVariant.SizeId = sizeId;
-                productVariant.Quantity = productVariantRequest.Quantity;
                 productVariant.Price = productVariantRequest.Price;
 
                 productVariant.Product.MinPrice = minPrice;
@@ -488,6 +498,7 @@ namespace FurnitureStoreBE.Services.ProductService.ProductService
                     ImageSource = productVariant.Product.Asset.URL,
                     BrandName = productVariant.Product.Brand.BrandName,
                     CategoryName = productVariant.Product.Category.CategoryName,
+                    Materials = productVariant.Product.Materials.Select(m => m.MaterialName).ToList(),
                     ProductVariants = _mapper.Map<List<ProductVariantResponse>>(productVariant.Product.ProductVariants)
                 };
             }

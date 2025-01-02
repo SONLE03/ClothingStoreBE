@@ -13,6 +13,7 @@ namespace FurnitureStoreBE.DTOs.Response.ProductResponse
         public string CategoryName { get; set; }
         public string DisplayPrice { get; set; }
         public decimal Discount { get; set; } = 0;
+        public List<string> Materials { get; set; }
         public List<ProductVariantResponse> ProductVariants { get; set; }
     }
     public class ProductVariantResponse

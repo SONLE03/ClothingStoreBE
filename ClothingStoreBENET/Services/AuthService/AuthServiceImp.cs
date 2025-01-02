@@ -151,6 +151,7 @@ namespace FurnitureStoreBE.Services.Authentication
                 AccessToken = await GenerateAccessToken(user),
                 RefreshToken = await _tokenService.GenerateRefreshToken(user),
                 UserId = user.Id,
+                Role = user.Role
             }; 
         }
 

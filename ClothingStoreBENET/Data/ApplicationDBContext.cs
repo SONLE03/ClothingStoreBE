@@ -34,6 +34,9 @@ namespace FurnitureStoreBE.Data
         public DbSet<Notification> Notification { get; set; }
         public DbSet<AspNetTypeClaims> TypeClaims { get; set; }
         public DbSet<AspNetRoleClaims<string>> RoleClaims { get; set; }
+        public DbSet<ImportInvoice> ImportInvoices { get; set; }
+        public DbSet<ImportItem> ImportItems { get; set; }
+        public DbSet<Material> Materials { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -100,7 +103,32 @@ namespace FurnitureStoreBE.Data
                .HasOne(p => p.Coupon)
                .WithOne(p => p.Asset)
                .HasForeignKey<Coupon>(p => p.AssetId);
-
+            // Import Item
+            modelBuilder.Entity<ImportItem>()
+                .HasKey(ii => new { ii.ProductVariantId, ii.ImportInvoiceId });
+            modelBuilder.Entity<ImportInvoice>()
+               .HasMany(i => i.ImportItem)
+               .WithOne(ii => ii.ImportInvoice)
+               .HasForeignKey(ii => ii.ImportInvoiceId)
+               .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ProductVariant>()
+                .HasMany(pv => pv.ImportItem)
+                .WithOne(ii => ii.ProductVariant)
+                .HasForeignKey(ii => ii.ProductVariantId)
+                .OnDelete(DeleteBehavior.Restrict);
+            // Material relationship
+            modelBuilder.Entity<Asset>()
+              .HasOne(p => p.Material)
+              .WithOne(p => p.Asset)
+              .HasForeignKey<Material>(p => p.AssetId);
+            // Product relationship
+            modelBuilder.Entity<Product>()
+               .HasMany(p => p.Materials)
+               .WithMany(p => p.Products)
+               .UsingEntity<Dictionary<string, object>>(
+                   "ProductMaterial",
+                   j => j.HasOne<Material>().WithMany().HasForeignKey("MaterialId").OnDelete(DeleteBehavior.Restrict),
+                   j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId").OnDelete(DeleteBehavior.Restrict));
             // User used coupon
             modelBuilder.Entity<UserUsedCoupon>()
                 .HasKey(uc => new { uc.UserId, uc.CouponId });

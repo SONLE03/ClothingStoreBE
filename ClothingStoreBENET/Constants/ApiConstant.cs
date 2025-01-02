@@ -12,6 +12,7 @@
         public const string STAFF = VERSION + "/staff";
         public const string CUSTOMER = VERSION + "/customer";
 
+        public const string MATERIAL = VERSION + "/material";
         public const string SIZE = VERSION + "/size";
         public const string BRAND = VERSION + "/brand";
         public const string CATEGORY = VERSION + "/category";
